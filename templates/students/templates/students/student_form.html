@@ -1,26 +1,43 @@
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Form</title>
+    <title>Secure Student Management System - Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
-    <h1>Student Registration Form</h1>
+    <h2>Secure Student Management System</h2>
+    <h3>Student Login</h3>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Invalid username or password. Please try again.
+        </p>
+    {% endif %}
 
     <form method="POST">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <p>
+            <label for="id_username">Username:</label><br>
+            {{ form.username }}
+        </p>
 
-        <button type="submit">Save Student</button>
+        <p>
+            <label for="id_password">Password:</label><br>
+            {{ form.password }}
+        </p>
+
+        <input type="hidden" name="next" value="{{ next }}">
+
+        <button type="submit">Login</button>
     </form>
-
-    <br>
-
-    <a href="{% url 'student_list' %}">Back to Dashboard</a>
 
 </body>
 </html>
+
