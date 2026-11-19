@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import RegistrationForm
 
@@ -40,7 +41,6 @@ def login_view(request):
         return redirect("student_list")
 
     if request.method == "POST":
-
         username = request.POST.get("username")
         password = request.POST.get("password")
 
@@ -55,7 +55,11 @@ def login_view(request):
 
             next_url = request.POST.get("next")
 
-            if next_url and next_url.startswith("/"):
+            if next_url and url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure()
+            ):
                 return redirect(next_url)
 
             return redirect("student_list")
